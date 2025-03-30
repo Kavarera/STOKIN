@@ -1,6 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:stokin/features/stokin/data/models/category_model.dart';
+import 'package:stokin/features/stokin/data/models/product_model.dart';
 
 class StokinLocalDataSource {
   static Database? _database;
@@ -66,6 +67,39 @@ class StokinLocalDataSource {
       'categories',
       category.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> deleteProduct(int productId) async {
+    final db = await database;
+    await db!.delete('products', where: 'id = ?', whereArgs: [productId]);
+  }
+
+  Future<void> insertProduct(ProductModel product) async {
+    final db = await database;
+    await db!.insert(
+      'products',
+      product.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<ProductModel>> getProducts() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db!.query('products');
+
+    return List.generate(maps.length, (i) {
+      return ProductModel.fromJson(maps[i]);
+    });
+  }
+
+  Future<void> updateProduct(ProductModel product) async {
+    final db = await database;
+    await db!.update(
+      'products',
+      product.toJson(),
+      where: 'id = ?',
+      whereArgs: [product.id],
     );
   }
 }
