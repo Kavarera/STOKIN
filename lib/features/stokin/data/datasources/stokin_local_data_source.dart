@@ -1,5 +1,6 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:stokin/features/stokin/data/models/category_model.dart';
 
 class StokinLocalDataSource {
   static Database? _database;
@@ -37,11 +38,34 @@ class StokinLocalDataSource {
       CREATE TABLE transactions(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         productId INTEGER,
-        quantity INTEGER,
+        amount INTEGER,
         date TEXT,
         type TEXT,
         FOREIGN KEY (productId) REFERENCES products(id)
       )
     ''');
+  }
+
+  Future<void> deleteCategory(int id) async {
+    final db = await database;
+    await db!.delete('categories', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<List<CategoryModel>> getCategories() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db!.query('categories');
+
+    return List.generate(maps.length, (i) {
+      return CategoryModel.fromJson(maps[i]);
+    });
+  }
+
+  Future<void> insertCategory(CategoryModel category) async {
+    final db = await database;
+    await db!.insert(
+      'categories',
+      category.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 }

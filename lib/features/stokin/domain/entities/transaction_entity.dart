@@ -1,0 +1,20 @@
+import 'package:stokin/core/data/transaction_type_enum.dart';
+import 'package:stokin/features/stokin/domain/entities/product_entity.dart';
+
+class TransactionEntity {
+  final String id;
+  final String name;
+  final double amount;
+  final DateTime date;
+  final TransactionType type;
+  final ProductEntity product;
+
+  TransactionEntity({
+    required this.id,
+    required this.name,
+    required this.amount,
+    required this.date,
+    required this.type,
+    required this.product,
+  });
+}
