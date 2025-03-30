@@ -4,7 +4,6 @@ import 'package:stokin/features/stokin/domain/entities/transaction_entity.dart';
 class TransactionModel extends TransactionEntity {
   TransactionModel({
     required super.id,
-    required super.name,
     required super.amount,
     required super.date,
     required super.type,
@@ -14,7 +13,6 @@ class TransactionModel extends TransactionEntity {
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
     return TransactionModel(
       id: json['id'],
-      name: json['name'],
       amount: json['amount'],
       date: DateTime.parse(json['date']),
       type: json['type'],
@@ -30,7 +28,6 @@ class TransactionModel extends TransactionEntity {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': name,
       'amount': amount,
       'date': date.toIso8601String(),
       'type': type,
@@ -39,5 +36,15 @@ class TransactionModel extends TransactionEntity {
       'product_quantity': product.quantity,
       'product_unit': product.unit,
     };
+  }
+
+  TransactionEntity toEntity() {
+    return TransactionEntity(
+      id: id,
+      amount: amount,
+      date: date,
+      type: type,
+      product: product,
+    );
   }
 }

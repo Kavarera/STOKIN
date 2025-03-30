@@ -2,6 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:stokin/features/stokin/data/models/category_model.dart';
 import 'package:stokin/features/stokin/data/models/product_model.dart';
+import 'package:stokin/features/stokin/data/models/transaction_model.dart';
 
 class StokinLocalDataSource {
   static Database? _database;
@@ -100,6 +101,39 @@ class StokinLocalDataSource {
       product.toJson(),
       where: 'id = ?',
       whereArgs: [product.id],
+    );
+  }
+
+  Future<void> deleteTransaction(int id) async {
+    final db = await database;
+    await db!.delete('transactions', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<List<TransactionModel>> getTransactions() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db!.query('transactions');
+
+    return List.generate(maps.length, (i) {
+      return TransactionModel.fromJson(maps[i]);
+    });
+  }
+
+  Future<void> insertTransaction(TransactionModel tm) async {
+    final db = await database;
+    await db!.insert(
+      'transactions',
+      tm.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> updateTransaction(TransactionModel tm) async {
+    final db = await database;
+    await db!.update(
+      'transactions',
+      tm.toJson(),
+      where: 'id = ?',
+      whereArgs: [tm.id],
     );
   }
 }
