@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:stokin/features/stokin/data/models/category_model.dart';
@@ -22,8 +24,8 @@ class StokinLocalDataSource {
     await db.execute('''
       CREATE TABLE categories(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        )
+        name TEXT
+        );
       ''');
 
     await db.execute('''
@@ -34,7 +36,7 @@ class StokinLocalDataSource {
       unit TEXT,
       categoryId INTEGER NULL,
       FOREIGN KEY (categoryId) REFERENCES categories(id)
-    )''');
+    );''');
 
     await db.execute('''
       CREATE TABLE transactions(
@@ -44,7 +46,7 @@ class StokinLocalDataSource {
         date TEXT,
         type TEXT,
         FOREIGN KEY (productId) REFERENCES products(id)
-      )
+      );
     ''');
   }
 
@@ -87,7 +89,11 @@ class StokinLocalDataSource {
 
   Future<List<ProductModel>> getProducts() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db!.query('products');
+    final List<Map<String, dynamic>> maps = await db!.rawQuery('''
+    SELECT products.*, categories.name as category_name
+    FROM products
+    LEFT JOIN categories ON products.categoryId = categories.id
+''');
 
     return List.generate(maps.length, (i) {
       return ProductModel.fromJson(maps[i]);
@@ -95,12 +101,17 @@ class StokinLocalDataSource {
   }
 
   Future<void> updateProduct(ProductModel product) async {
+    log('scategory: ${product.category?.name}', name: "STOKINLOCALDATASOURCE");
     final db = await database;
     await db!.update(
       'products',
       product.toJson(),
       where: 'id = ?',
       whereArgs: [product.id],
+    );
+    log(
+      "Product updated: ${await db.query('products')}",
+      name: "STOKINLOCALDATASOURCE",
     );
   }
 
@@ -111,7 +122,18 @@ class StokinLocalDataSource {
 
   Future<List<TransactionModel>> getTransactions() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db!.query('transactions');
+    final List<Map<String, dynamic>> maps = await db!.rawQuery('''
+    SELECT 
+    transactions.*, 
+    products.name as product_name, 
+    products.unit as product_unit, 
+    products.quantity AS product_quantity,
+    products.categoryId AS product_categoryId, 
+    categories.name AS category_name
+    FROM transactions
+    LEFT JOIN products ON transactions.productId = products.id
+    LEFT JOIN categories ON products.categoryId = categories.id
+''');
 
     return List.generate(maps.length, (i) {
       return TransactionModel.fromJson(maps[i]);
@@ -124,6 +146,12 @@ class StokinLocalDataSource {
       'transactions',
       tm.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    log(
+      '${await db.rawQuery('''
+SELECT * FROM transactions;
+''')}',
+      name: 'STOKINLOCALDATASOURCE',
     );
   }
 

@@ -18,19 +18,21 @@ class ProductModel extends ProductEntity {
       quantity: json['quantity'],
       unit: json['unit'],
       category:
-          json['category'] != null
-              ? CategoryModel.fromJson(json['category'])
+          json['categoryId'] != null
+              ? CategoryModel(
+                name: json['category_name'],
+                id: json['categoryId'],
+              )
               : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'name': name,
       'quantity': quantity,
       'unit': unit,
-      'category': category?.id,
+      'categoryId': category?.id,
     };
   }
 

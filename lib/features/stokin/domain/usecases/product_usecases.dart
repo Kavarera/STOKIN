@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:stokin/core/error/failure.dart';
 import 'package:stokin/features/stokin/domain/entities/product_entity.dart';
@@ -40,6 +42,7 @@ class UpdateProductUseCase {
   UpdateProductUseCase(this.productRepository);
 
   Future<Either<Failure, void>> call(ProductEntity product) async {
+    log('scategory: ${product.category?.id}', name: "PRODUCTUSECASE");
     return await productRepository.updateProduct(product);
   }
 }

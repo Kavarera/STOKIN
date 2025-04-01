@@ -1,5 +1,8 @@
+import 'package:stokin/features/stokin/data/models/category_model.dart';
 import 'package:stokin/features/stokin/data/models/product_model.dart';
 import 'package:stokin/features/stokin/domain/entities/transaction_entity.dart';
+
+import '../../../../core/data/transaction_type_enum.dart';
 
 class TransactionModel extends TransactionEntity {
   TransactionModel({
@@ -15,26 +18,32 @@ class TransactionModel extends TransactionEntity {
       id: json['id'],
       amount: json['amount'],
       date: DateTime.parse(json['date']),
-      type: json['type'],
+      type:
+          json['type'] == "KELUAR"
+              ? TransactionType.KELUAR
+              : TransactionType.MASUK,
       product: ProductModel(
         id: json['productId'],
         name: json['product_name'],
         quantity: json['product_quantity'],
         unit: json['product_unit'],
+        category:
+            json['category_id'] != null
+                ? CategoryModel(
+                  name: json['category_name'],
+                  id: json['category_id'],
+                )
+                : null,
       ),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'amount': amount,
       'date': date.toIso8601String(),
-      'type': type,
+      'type': type.name,
       'productId': product.id,
-      'product_name': product.name,
-      'product_quantity': product.quantity,
-      'product_unit': product.unit,
     };
   }
 

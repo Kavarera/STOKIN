@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 
 import 'package:stokin/core/error/failure.dart';
@@ -52,6 +54,10 @@ class ProductRepositoryImpl implements ProductRepository {
   @override
   Future<Either<Failure, void>> updateProduct(ProductEntity product) async {
     try {
+      log(
+        'scategory: ${product.category?.name}',
+        name: "PRODUCTREPOSITORYIMPL",
+      );
       await localDataSource.updateProduct(
         ProductModel(
           id: product.id,
