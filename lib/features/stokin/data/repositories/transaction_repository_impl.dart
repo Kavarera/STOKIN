@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:stokin/core/data/transaction_type_enum.dart';
 
@@ -28,6 +30,12 @@ class TransactionRepositoryImpl implements TransactionRepository {
   getTransactions() async {
     try {
       final transactions = await localDataSource.getTransactions();
+      transactions.forEach(
+        (e) => log(
+          'Transaction: ${e.toEntity().product.category?.name}',
+          name: 'TransactionRepositoryImpl',
+        ),
+      );
       return Right(transactions.map((e) => e.toEntity()).toList());
     } catch (e) {
       return Left(DatabaseFailure(message: e.toString()));

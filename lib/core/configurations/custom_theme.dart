@@ -37,6 +37,11 @@ class CustomTheme {
       backgroundColor: Color.fromRGBO(76, 201, 254, 1),
       foregroundColor: Colors.white,
     ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: WidgetStateProperty.all(Colors.black),
+      ),
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.all(
@@ -47,7 +52,7 @@ class CustomTheme {
     ),
     dialogTheme: DialogTheme(
       backgroundColor: Colors.white,
-      barrierColor: secondaryColor.withAlpha(255),
+      barrierColor: secondaryColor.withAlpha(100),
     ),
   );
   static const Color primaryColor = Color.fromRGBO(55, 175, 225, 1);

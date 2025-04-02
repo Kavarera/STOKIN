@@ -28,10 +28,10 @@ class TransactionModel extends TransactionEntity {
         quantity: json['product_quantity'],
         unit: json['product_unit'],
         category:
-            json['category_id'] != null
+            json['product_categoryId'] != null
                 ? CategoryModel(
                   name: json['category_name'],
-                  id: json['category_id'],
+                  id: json['product_categoryId'],
                 )
                 : null,
       ),

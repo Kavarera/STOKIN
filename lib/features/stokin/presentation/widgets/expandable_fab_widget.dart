@@ -29,6 +29,7 @@ class ExpandableFAB extends StatelessWidget {
                           ? Offset.zero
                           : const Offset(0, 1), // Dari bawah ke atas
                   child: FloatingActionButton(
+                    heroTag: 'category_fab',
                     mini: true,
                     onPressed: () {
                       _showItemAddDialog(context, controller, 1);
@@ -44,6 +45,7 @@ class ExpandableFAB extends StatelessWidget {
                           ? Offset.zero
                           : const Offset(0, 1),
                   child: FloatingActionButton(
+                    heroTag: 'product_fab',
                     mini: true,
                     onPressed: () {
                       _showItemAddDialog(context, controller, 2);
@@ -59,6 +61,7 @@ class ExpandableFAB extends StatelessWidget {
                           ? Offset.zero
                           : const Offset(0, 1),
                   child: FloatingActionButton(
+                    heroTag: 'transaction_fab',
                     onPressed: () {
                       _showItemAddDialog(context, controller, 3);
                     },
@@ -71,6 +74,7 @@ class ExpandableFAB extends StatelessWidget {
             ),
           ),
           FloatingActionButton(
+            heroTag: 'main_fab',
             onPressed: () {
               controller.isExpandedFab.value = !controller.isExpandedFab.value;
             },

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:stokin/core/configurations/custom_theme.dart';
+import 'package:stokin/features/stokin/domain/entities/category_entity.dart';
+import 'package:stokin/features/stokin/presentation/routes/app_pages.dart';
 import '../../../../../../core/data/menu_type_enum.dart';
+import '../../../widgets/alert_dialog_pick_category.dart';
 import '../../../widgets/expandable_fab_widget.dart';
 import '../../../widgets/home_list_widget.dart';
 import '../controllers/home_controller.dart';
@@ -23,8 +26,10 @@ class HomeView extends GetView<HomeController> {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.assessment_outlined, color: Colors.white),
+              onPressed: () {
+                Get.toNamed(Routes.REPORT);
+              },
+              icon: const Icon(Icons.analytics, color: Colors.white),
             ),
           ],
         ),
@@ -100,9 +105,15 @@ class HomeView extends GetView<HomeController> {
                     futureFunction: controller.getCategories,
                   );
                 } else if (controller.listType.value == MenuType.TRANSACTIONS) {
-                  return HomeListWidget(
-                    controller: controller,
-                    futureFunction: controller.getTransactions,
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: HomeListWidget(
+                          controller: controller,
+                          futureFunction: controller.getTransactions,
+                        ),
+                      ),
+                    ],
                   );
                 } else {
                   return Center(child: Text("No data found."));

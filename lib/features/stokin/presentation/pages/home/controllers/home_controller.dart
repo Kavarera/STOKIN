@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
+import 'package:stokin/core/error/failure.dart';
 import 'package:stokin/features/stokin/domain/entities/category_entity.dart';
 import 'package:stokin/features/stokin/domain/entities/product_entity.dart';
 import 'package:stokin/features/stokin/domain/entities/transaction_entity.dart';
@@ -17,6 +19,10 @@ class HomeController extends GetxController {
   final GetCategoriesUseCase getCategoriesUseCase;
   final GetProductsUseCase getProductsUseCase;
   final GetTransactionsUseCase getTransactionsUseCase;
+  final GetTransactionsByCategoryUseCase getTransactionByCategory;
+  final GetTransactionsByDateUseCase getTransactionByDate;
+  final GetTransactionsByProductUseCase getTransactionByProduct;
+  final GetTransactionsByTypeUseCase getTransactionByType;
   final InsertCategoryUseCase insertCategoryUseCase;
   final InsertProductUseCase insertProductUseCase;
   final InsertTransactionUseCase insertTransactionUseCase;
@@ -26,6 +32,10 @@ class HomeController extends GetxController {
   final UpdateProductUseCase updateProductUseCase;
 
   HomeController({
+    required this.getTransactionByCategory,
+    required this.getTransactionByDate,
+    required this.getTransactionByProduct,
+    required this.getTransactionByType,
     required this.updateProductUseCase,
     required this.getCategoriesUseCase,
     required this.getProductsUseCase,
@@ -53,7 +63,8 @@ class HomeController extends GetxController {
   }
 
   Future<List<TransactionEntity>> getTransactions() async {
-    final result = await getTransactionsUseCase.call();
+    Either<Failure, List<TransactionEntity>> result =
+        await getTransactionsUseCase.call();
     return result.fold((l) {
       log('error: ${l.message}', name: "HOMECONTROLLER");
       return [];

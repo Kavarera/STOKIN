@@ -135,6 +135,22 @@ class StokinLocalDataSource {
     LEFT JOIN categories ON products.categoryId = categories.id
 ''');
 
+    log(
+      'Get transactions: ${await db!.rawQuery('''
+    SELECT 
+    transactions.*, 
+    products.name as product_name, 
+    products.unit as product_unit, 
+    products.quantity AS product_quantity,
+    products.categoryId AS product_categoryId, 
+    categories.name AS category_name
+    FROM transactions
+    LEFT JOIN products ON transactions.productId = products.id
+    LEFT JOIN categories ON products.categoryId = categories.id
+''')}',
+      name: 'STOKINLOCALDATASOURCE',
+    );
+
     return List.generate(maps.length, (i) {
       return TransactionModel.fromJson(maps[i]);
     });

@@ -32,6 +32,7 @@ class HomeListWidget extends StatelessWidget {
         if (snapshot.data == null || snapshot.data!.isEmpty) {
           return Center(child: Text("No products found."));
         }
+
         return ListView.builder(
           itemCount: snapshot.data!.length,
           itemBuilder: (context, index) {
