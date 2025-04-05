@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stokin_bloc/features/stokin/presentation/bloc/home/home_bloc.dart';
 import 'package:stokin_bloc/features/stokin/presentation/widgets/expandable_fab.dart';
 
@@ -24,7 +25,9 @@ class HomePage extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                context.pushNamed('reports');
+              },
               icon: const Icon(Icons.analytics, color: Colors.white),
             ),
           ],

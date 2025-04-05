@@ -12,6 +12,7 @@ import '../../features/stokin/domain/repositories/category_repository.dart';
 import '../../features/stokin/domain/usecases/category_usecase.dart';
 import '../../features/stokin/domain/usecases/product_usecase.dart';
 import '../../features/stokin/domain/usecases/transaction_usecase.dart';
+import '../../features/stokin/presentation/bloc/report/report_bloc.dart';
 
 final DependencyInjection = GetIt.instance;
 Future<void> init() async {
@@ -76,6 +77,15 @@ Future<void> init() async {
   DependencyInjection.registerFactory(() => FabCubit());
 
   //BLoC
+  // PAGE REPORT
+  DependencyInjection.registerFactory(
+    () => ReportBloc(
+      const ReportState(),
+      getCategoriesUseCase: DependencyInjection(),
+      getTransactionsUseCase: DependencyInjection(),
+    ),
+  );
+
   // PAGE HOME
   DependencyInjection.registerFactory(
     () => HomeBloc(
