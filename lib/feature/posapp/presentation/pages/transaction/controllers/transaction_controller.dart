@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:posapp/feature/posapp/domain/entities/transaction_entity.dart';
 import 'package:posapp/feature/posapp/domain/usecases/product_usecase.dart';
@@ -88,7 +90,15 @@ class TransactionController extends GetxController {
     products.assignAll(result);
   }
 
-  void updateTransaction(TransactionEntity transactionEntity) {}
+  void updateTransaction(TransactionEntity transactionEntity) async {
+    await updateTransactionUseCase.call(
+      transactionEntity.copyWith(
+        id: transactionEntity.id,
+        items: cartTransactions,
+      ),
+    );
+    cartTransactions.clear();
+  }
 
   void insertTransaction() async {
     final transaction = TransactionEntity(

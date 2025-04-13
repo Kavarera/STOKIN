@@ -28,7 +28,7 @@ class HomeView extends GetView<HomeController> {
             IconButton(
               onPressed: () {
                 // TODO: Implement NAVIGATION TO REPORTS PAGE
-                // Get.toNamed(Routes.REPORTS);
+                Get.toNamed(Routes.REPORT);
               },
               icon: const Icon(Icons.analytics, color: Colors.white),
             ),

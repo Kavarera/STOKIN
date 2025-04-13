@@ -92,7 +92,7 @@ class TransactionView extends GetView<TransactionController> {
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (controller.isUpdate) {
+                    if (controller.isUpdate && controller.transaction != null) {
                       controller.updateTransaction(controller.transaction!);
                     } else {
                       controller.insertTransaction();

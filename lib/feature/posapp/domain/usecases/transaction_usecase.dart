@@ -41,6 +41,7 @@ class UpdateTransactionUseCase {
   Future<void> call(TransactionEntity transaction) async {
     try {
       await transactionRepository.updateTransaction(transaction);
+      log("Berhasil update transaksi");
     } catch (e) {
       log(e.toString(), name: 'UpdateTransactionUseCase');
     }

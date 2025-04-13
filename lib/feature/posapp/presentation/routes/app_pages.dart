@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
 import 'package:posapp/feature/posapp/presentation/pages/home/controllers/home_controller.dart';
+import 'package:posapp/feature/posapp/presentation/pages/report/controllers/report_controller.dart';
 
 import '../../domain/usecases/product_usecase.dart';
 import '../../domain/usecases/transaction_usecase.dart';
 import '../pages/home/views/home_view.dart';
+import '../pages/report/views/report_view.dart';
 import '../pages/transaction/controllers/transaction_controller.dart';
 import '../pages/transaction/views/transaction_view.dart';
 
@@ -68,6 +70,20 @@ class AppPages {
             insertTransactionUseCase: Get.find(),
             updateTransactionUseCase: Get.find(),
           ),
+        );
+      }),
+    ),
+
+    GetPage(
+      name: _Paths.REPORT,
+      page: () => ReportView(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<GetTransactionUseCase>(
+          () => GetTransactionUseCase(Get.find()),
+        );
+
+        Get.lazyPut<ReportController>(
+          () => ReportController(getTransactionUseCase: Get.find()),
         );
       }),
     ),

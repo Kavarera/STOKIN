@@ -73,6 +73,22 @@ class PosappLocalDatasource {
       where: 'id = ?',
       whereArgs: [transaction.id],
     );
+
+    // Hapus item lama dulu biar ga numpuk
+    await db.delete(
+      'transaction_items',
+      where: 'transaction_id = ?',
+      whereArgs: [transaction.id],
+    );
+
+    // Insert ulang item baru
+    for (var item in transaction.items) {
+      await db.insert('transaction_items', {
+        'transaction_id': transaction.id,
+        'product_id': item.product.id,
+        'quantity': item.quantity,
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+    }
   }
 
   Future<List<TransactionModel>> getTransactions() async {
@@ -115,10 +131,6 @@ class PosappLocalDatasource {
       );
     }
     return results;
-    // final List<Map<String, dynamic>> maps = await db!.query('transactions');
-    // return List.generate(maps.length, (i) {
-    //   return TransactionModel.fromJson(maps[i]);
-    // });
   }
 
   //Product
